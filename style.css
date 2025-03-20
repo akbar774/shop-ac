@@ -1,12 +1,23 @@
 /* Tampilan Dasar */
 body {
     font-family: Arial, sans-serif;
-    background: #f4f4f9;
+    height: 100vh;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    margin: 0;
+
+    /* Mendukung Mode Terang dan Gelap */
+    background: #f4f4f9; /* Mode Terang (HEAD) */
+    color: black; /* Default untuk mode terang */
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212; /* Mode Gelap (59436b1) */
+        color: white; /* Teks jadi putih di mode gelap */
+    }
 }
 
 /* Kontainer */
@@ -23,41 +34,18 @@ body {
 /* Formulir */
 label {
     display: block;
-    margin: 10px 0 5px;
 }
 
-input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
+/* Tombol */
 button {
-    background: #4CAF50;
+    background: #007bff;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
-    margin: 5px;
 }
 
 button:hover {
-    background: #45a049;
-}
-
-/* Pesan Error */
-#errorMsg {
-    color: red;
-    margin-top: 10px;
-}
-
-/* Gambar Bot */
-.bot-image {
-    width: 100%;
-    max-width: 300px;
-    margin: 20px 0;
-    border-radius: 8px;
+    background: #0056b3;
 }

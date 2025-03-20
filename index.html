@@ -3,11 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Shop AC - Dashboard</title>
+    <title>Shop AC – Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
     <!-- Halaman Login -->
     <div class="container" id="loginPage">
         <h2>Login ke Shop AC</h2>
@@ -19,68 +20,23 @@
             <input type="password" id="password" placeholder="Masukkan Password" required>
 
             <button type="submit">Masuk</button>
+            <p id="errorMsg"></p>
         </form>
-        <p id="errorMsg"></p>
     </div>
 
     <!-- Halaman Dashboard -->
     <div class="container" id="dashboardPage" style="display: none;">
         <h2>Dashboard Shop AC</h2>
         <p>Selamat datang, <span id="userDisplay"></span>!</p>
-        
+
         <!-- Gambar -->
         <img src="img/bot-image.jpg" alt="Gambar Bot" class="bot-image">
 
         <!-- Informasi Produk -->
         <p><strong>Produk:</strong> Bot otomatis</p>
         <p><strong>Harga:</strong> Rp 2.000/hari</p>
-        
-        <button onclick="orderBot()">Pesan Bot Sekarang</button>
-        <button onclick="logout()">Keluar</button>
     </div>
 
-    <script>
-        // Data Login
-        const validUser = {
-            username: "user123",
-            password: "pass123"
-        };
-
-        // Ambil Elemen HTML
-        const loginForm = document.getElementById('loginForm');
-        const loginPage = document.getElementById('loginPage');
-        const dashboardPage = document.getElementById('dashboardPage');
-        const errorMsg = document.getElementById('errorMsg');
-        const userDisplay = document.getElementById('userDisplay');
-
-        // Proses Login
-        loginForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            if (username === validUser.username && password === validUser.password) {
-                loginPage.style.display = 'none';
-                dashboardPage.style.display = 'block';
-                userDisplay.textContent = username; // Tampilkan nama pengguna
-            } else {
-                errorMsg.textContent = "Nama atau password salah!";
-            }
-        });
-
-        // Fungsi Pemesanan Bot
-        function orderBot() {
-            alert("Pesanan Bot Anda Berhasil! Harga: Rp 2.000/hari");
-        }
-
-        // Fungsi Logout
-        function logout() {
-            dashboardPage.style.display = 'none';
-            loginPage.style.display = 'block';
-            loginForm.reset();
-        }
-    </script>
 </body>
 
-              </html>
+</html>
