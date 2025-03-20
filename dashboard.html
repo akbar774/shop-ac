@@ -4,169 +4,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Order</title>
+    <title>Dashboard AC</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: Arial, sans-serif;
             color: white;
+            text-align: center;
+            overflow: hidden;
             background: url('img/logo.webp') no-repeat center center/cover;
         }
 
         .container {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
+            margin-top: 50px;
         }
 
-        h2 {
-            margin-bottom: 20px;
+        h1 {
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px cyan, 0 0 20px cyan;
+            }
+
+            to {
+                text-shadow: 0 0 20px cyan, 0 0 30px cyan;
+            }
         }
 
         .btn {
-            display: block;
-            margin: 10px auto;
             padding: 10px 20px;
-            color: white;
-            background-color: #4CAF50;
+            margin: 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            font-size: 16px;
         }
 
-        .btn:hover {
-            transform: scale(1.1);
+        .btn-shop {
+            background-color: #4CAF50;
+            color: white;
         }
 
-        .payment-method {
+        .btn-shop:hover {
+            background-color: #45a049;
+        }
+
+        .btn-payment {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .btn-payment:hover {
+            background-color: #1976D2;
+        }
+
+        .falling-stars {
+            position: absolute;
+            width: 2px;
+            height: 40px;
+            background: white;
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-100vh);
+            }
+
+            to {
+                transform: translateY(100vh);
+            }
+        }
+
+        #orderForm {
+            display: none;
             margin-top: 20px;
         }
 
-        .coming-soon {
-            background-color: #808080;
-            cursor: not-allowed;
+        input {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
         }
 
-        #stars {
+        #notification {
             position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
         }
     </style>
 </head>
 
 <body>
-
-    <canvas id="stars"></canvas>
+    <div id="notification">Ada pesanan baru!</div>
 
     <div class="container">
-        <h2>Dashboard Order</h2>
+        <h1>Dashboard AC</h1>
 
-        <!-- Menu Shop -->
-        <button class="btn" onclick="order('Bot by AC: 1 Hari', 2000)">Bot by AC: 1 Hari - 2k</button>
-        <button class="btn" onclick="order('Bot by AC: 1 Minggu', 10000)">Bot by AC: 1 Minggu - 10k</button>
-        <button class="btn" onclick="order('Bot by AC: 1 Bulan', 40000)">Bot by AC: 1 Bulan - 40k</button>
+        <h2>Bot by AC</h2>
+        <button class="btn btn-shop" onclick="showForm('Bot 1 Hari', 2000)">1 Hari (2k)</button>
+        <button class="btn btn-shop" onclick="showForm('Bot 1 Minggu', 10000)">1 Minggu (10k)</button>
+        <button class="btn btn-shop" onclick="showForm('Bot 1 Bulan', 30000)">1 Bulan (30k)</button>
 
-        <button class="btn" onclick="order('Unban by AC: Batu', 40000)">Unban by AC: Batu - 40k</button>
-        <button class="btn" onclick="order('Unban by AC: Spam', 20000)">Unban by AC: Spam - 20k</button>
+        <h2>Unban by AC</h2>
+        <button class="btn btn-shop" onclick="showForm('Unban Batu', 40000)">Batu (40k)</button>
+        <button class="btn btn-shop" onclick="showForm('Unban Spam', 20000)">Spam (20k)</button>
 
-        <!-- Metode Pembayaran -->
-        <div class="payment-method">
-            <h3>Pilih Metode Pembayaran:</h3>
-            <button class="btn" onclick="payWithDANA()">DANA</button>
-            <button class="btn coming-soon" disabled>OVO (Coming Soon)</button>
-            <button class="btn coming-soon" disabled>GoPay (Coming Soon)</button>
+        <div id="orderForm">
+            <h3>Formulir Pemesanan</h3>
+            <input type="text" id="name" placeholder="Nama" required>
+            <input type="text" id="phone" placeholder="Nomor HP" required>
+            <button class="btn btn-payment" onclick="processOrder()">Proses Pesanan</button>
         </div>
+
+        <h2>Metode Pembayaran</h2>
+        <button class="btn btn-payment" onclick="payment('DANA')">DANA</button>
+        <button class="btn btn-payment" disabled>OVO (Coming Soon)</button>
+        <button class="btn btn-payment" disabled>GOPAY (Coming Soon)</button>
     </div>
 
-    <!-- Musik Background -->
-    <audio autoplay loop>
+    <audio id="bg-music" autoplay loop>
         <source src="https://h.top4top.io/m_3366k5mud0.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung tag audio.
+        Browser tidak mendukung audio.
     </audio>
 
     <script>
         let selectedPackage = '';
+        let price = 0;
 
-        // Fungsi untuk memilih paket
-        function order(packageName, price) {
-            selectedPackage = `${packageName} - ${price}`;
-
-            // Notifikasi jika ada yang memesan
-            Swal.fire({
-                title: 'Pesanan Berhasil!',
-                text: `Anda telah memesan ${packageName} dengan harga Rp ${price}`,
-                icon: 'success'
-            });
-
-            // Kirim notifikasi WhatsApp
-            sendWhatsAppNotification(packageName, price);
+        function showForm(packageName, packagePrice) {
+            selectedPackage = packageName;
+            price = packagePrice;
+            document.getElementById('orderForm').style.display = 'block';
         }
 
-        // Fungsi untuk mengirim notifikasi WhatsApp
-        function sendWhatsAppNotification(packageName, price) {
-            const phoneNumber = '6285520790814'; // Nomor penerima
-            const message = `Pesanan baru! Paket: ${packageName}, Harga: Rp ${price}`;
-            const encodedMessage = encodeURIComponent(message);
-            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+        function processOrder() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
 
-            // Membuka WhatsApp dalam tab baru
-            window.open(whatsappURL, '_blank');
-        }
-
-        // Fungsi pembayaran DANA otomatis
-        function payWithDANA() {
-            if (!selectedPackage) {
-                Swal.fire('Pilih Paket Terlebih Dahulu', '', 'warning');
+            if (!name || !phone) {
+                Swal.fire('Error', 'Harap isi semua kolom!', 'error');
                 return;
             }
-            const amount = selectedPackage.match(/\d+/)[0]; // Ambil harga dari teks
-            window.location.href = `https://link.dana.id/qr/6285520790814?amount=${amount}`;
+
+            Swal.fire('Pesanan Diproses', `Pesanan: ${selectedPackage}\nNama: ${name}\nNomor: ${phone}`, 'success');
+            showNotification();
+
+            setTimeout(() => {
+                window.location.href = `https://wa.me/6285520790814?text=Bang%20AC%20order%20${selectedPackage}%20${price}`;
+            }, 2000);
         }
 
-        // Efek Bintang Jatuh
-        const canvas = document.getElementById("stars");
-        const ctx = canvas.getContext("2d");
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const stars = [];
-
-        for (let i = 0; i < 200; i++) {
-            stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.random() * 2,
-                speed: Math.random() * 3 + 1,
-            });
+        function payment(method) {
+            if (method === 'DANA') {
+                Swal.fire('Pembayaran DANA', 'Silakan transfer ke 085520790814 sesuai nominal yang dipilih.', 'info');
+            }
         }
 
-        function drawStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            stars.forEach(star => {
-                ctx.fillStyle = "white";
-                ctx.beginPath();
-                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                ctx.fill();
-                star.y += star.speed;
-                if (star.y > canvas.height) star.y = 0;
-            });
-            requestAnimationFrame(drawStars);
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 5000);
         }
 
-        drawStars();
+        document.addEventListener('DOMContentLoaded', () => {
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'falling-stars';
+                star.style.left = `${Math.random() * window.innerWidth}px`;
+                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                document.body.appendChild(star);
+            }
+        });
     </script>
 
 </body>
