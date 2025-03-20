@@ -1,0 +1,28 @@
+{
+    "admin": {
+        "username": "actzy909",
+        "password": "3Z^Yk~HaKd6M-spj>PoC"
+    },
+    "paket": [
+        {
+            "nama": "Bot by AC: 1 Hari - 2k",
+            "harga": 2000
+        },
+        {
+            "nama": "Bot by AC: 1 Minggu - 10k",
+            "harga": 10000
+        },
+        {
+            "nama": "Bot by AC: 1 Bulan - 40k",
+            "harga": 40000
+        },
+        {
+            "nama": "Unban by AC: Batu - 40k",
+            "harga": 40000
+        },
+        {
+            "nama": "Unban by AC: Spam - 20k",
+            "harga": 20000
+        }
+    ]
+}
