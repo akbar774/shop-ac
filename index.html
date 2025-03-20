@@ -3,40 +3,32 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Shop AC – Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Shop AC</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <div class="container">
+        <!-- Logo -->
+        <img src="img/logo.webp" alt="Logo Shop AC" class="logo">
 
-    <!-- Halaman Login -->
-    <div class="container" id="loginPage">
-        <h2>Login ke Shop AC</h2>
-        <form id="loginForm">
-            <label for="username">Nama:</label>
-            <input type="text" id="username" placeholder="Masukkan Nama" required>
+        <h2>Masuk ke Akun Anda</h2>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Masukkan Password" required>
+        <!-- Form Login -->
+        <form action="dashboard.html" method="POST">
+            <label for="username">Masukkan Nama</label>
+            <input type="text" id="username" name="username" placeholder="Masukkan Nama" required>
+
+            <label for="password">Masukkan Password</label>
+            <input type="password" id="password" name="password" placeholder="Masukkan Password" required>
 
             <button type="submit">Masuk</button>
-            <p id="errorMsg"></p>
         </form>
+
+        <!-- Link ke halaman signup -->
+        <p>Belum punya akun? <a href="signup.html">Daftar di sini</a></p>
     </div>
-
-    <!-- Halaman Dashboard -->
-    <div class="container" id="dashboardPage" style="display: none;">
-        <h2>Dashboard Shop AC</h2>
-        <p>Selamat datang, <span id="userDisplay"></span>!</p>
-
-        <!-- Gambar -->
-        <img src="img/bot-image.jpg" alt="Gambar Bot" class="bot-image">
-
-        <!-- Informasi Produk -->
-        <p><strong>Produk:</strong> Bot otomatis</p>
-        <p><strong>Harga:</strong> Rp 2.000/hari</p>
-    </div>
-
 </body>
 
 </html>
