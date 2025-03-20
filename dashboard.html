@@ -5,81 +5,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Order</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: url('img/logo.webp') no-repeat center center/cover;
-            color: white;
-            text-align: center;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            background: url('img/logo.webp') no-repeat center center/cover;
         }
 
         .container {
-            margin-top: 50px;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
         }
 
-        select, button {
-            padding: 10px;
-            margin: 10px;
-            border-radius: 5px;
-            border: none;
+        h2 {
+            margin-bottom: 20px;
         }
 
-        button {
-            background: #4CAF50;
+        .btn {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
             color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
-        button:hover {
-            background: #45a049;
+        .btn:hover {
+            transform: scale(1.1);
+        }
+
+        .payment-method {
+            margin-top: 20px;
+        }
+
+        .coming-soon {
+            background-color: #808080;
+            cursor: not-allowed;
+        }
+
+        #stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
     </style>
 </head>
 
 <body>
-    <audio autoplay loop>
-        <source src="https://h.top4top.io/m_3366k5mud0.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung pemutaran audio.
-    </audio>
+
+    <canvas id="stars"></canvas>
 
     <div class="container">
         <h2>Dashboard Order</h2>
 
-        <select id="paket">
-            <option value="2k">Bot by AC: 1 Hari - 2k</option>
-            <option value="10k">Bot by AC: 1 Minggu - 10k</option>
-            <option value="40k">Unban WA: Unban Batu - 40k</option>
-            <option value="20k">Unban WA: Unban Spam - 20k</option>
-        </select>
+        <!-- Menu Shop -->
+        <button class="btn" onclick="order('Bot by AC: 1 Hari', 2000)">Bot by AC: 1 Hari - 2k</button>
+        <button class="btn" onclick="order('Bot by AC: 1 Minggu', 10000)">Bot by AC: 1 Minggu - 10k</button>
+        <button class="btn" onclick="order('Bot by AC: 1 Bulan', 40000)">Bot by AC: 1 Bulan - 40k</button>
 
-        <select id="pembayaran">
-            <option value="dana">DANA</option>
-            <option value="ovo">OVO (Coming Soon)</option>
-            <option value="gopay">GOPAY (Coming Soon)</option>
-        </select>
+        <button class="btn" onclick="order('Unban by AC: Batu', 40000)">Unban by AC: Batu - 40k</button>
+        <button class="btn" onclick="order('Unban by AC: Spam', 20000)">Unban by AC: Spam - 20k</button>
 
-        <button onclick="pesanSekarang()">Pesan Sekarang</button>
+        <!-- Metode Pembayaran -->
+        <div class="payment-method">
+            <h3>Pilih Metode Pembayaran:</h3>
+            <button class="btn" onclick="payWithDANA()">DANA</button>
+            <button class="btn coming-soon" disabled>OVO (Coming Soon)</button>
+            <button class="btn coming-soon" disabled>GoPay (Coming Soon)</button>
+        </div>
     </div>
 
+    <!-- Musik Background -->
+    <audio autoplay loop>
+        <source src="https://h.top4top.io/m_3366k5mud0.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung tag audio.
+    </audio>
+
     <script>
-        function pesanSekarang() {
-            const paket = document.getElementById('paket').value;
-            const pembayaran = document.getElementById('pembayaran').value;
+        let selectedPackage = '';
 
-            if (pembayaran === 'dana') {
-                const urlDANA = `https://link.dana.id/qr/whatsapp?phone=6285520790814&amount=${paket.replace('k', '000')}`;
-                window.location.href = urlDANA;
-            } else {
-                alert(pembayaran + " - Coming Soon!");
-            }
-
-            const pesanWA = `Bang AC order jadi ${document.getElementById('paket').options[document.getElementById('paket').selectedIndex].text}`;
-            window.open(`https://wa.me/6285520790814?text=${encodeURIComponent(pesanWA)}`);
+        // Fungsi untuk memilih paket
+        function order(packageName, price) {
+            selectedPackage = `${packageName} - ${price}`;
+            Swal.fire({
+                title: 'Paket Dipilih',
+                text: `Anda memilih ${packageName} dengan harga Rp ${price}`,
+                icon: 'success'
+            });
         }
+
+        // Fungsi pembayaran DANA otomatis
+        function payWithDANA() {
+            if (!selectedPackage) {
+                Swal.fire('Pilih Paket Terlebih Dahulu', '', 'warning');
+                return;
+            }
+            const amount = selectedPackage.match(/\d+/)[0]; // Ambil harga dari teks
+            window.location.href = `https://link.dana.id/qr/6285520790814?amount=${amount}`;
+        }
+
+        // Efek Bintang Jatuh
+        const canvas = document.getElementById("stars");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const stars = [];
+
+        for (let i = 0; i < 200; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * 3 + 1,
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                ctx.fillStyle = "white";
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                star.y += star.speed;
+                if (star.y > canvas.height) star.y = 0;
+            });
+            requestAnimationFrame(drawStars);
+        }
+
+        drawStars();
     </script>
+
 </body>
 
 </html>
