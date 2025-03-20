@@ -6,12 +6,17 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
             text-align: center;
+            background: url('img/logo.webp') no-repeat center center/cover;
+            overflow: hidden;
         }
 
         h2 {
-            color: #4CAF50;
+            color: #fff;
+        }
+
+        .container {
+            margin-top: 100px;
         }
 
         button {
@@ -19,56 +24,164 @@
             margin: 10px;
             cursor: pointer;
         }
+
+        #notif {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff4757;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .form-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
     </style>
 </head>
 
 <body>
 
-    <h2>Dashboard Order</h2>
+    <!-- Notifikasi -->
+    <div id="notif">Pesanan baru diterima!</div>
 
-    <!-- Pilihan Paket -->
-    <label>Pilih Paket:</label>
-    <select id="paket">
-        <option value="2">Bot by AC: 1 Hari - 2k</option>
-        <option value="10">Bot by AC: 1 Minggu - 10k</option>
-        <option value="40">Unban Batu - 40k</option>
-    </select>
+    <!-- Formulir -->
+    <div class="container">
+        <h2>Dashboard Order</h2>
+        <div class="form-container">
+            <label>Nama: <input type="text" id="nama" required></label><br><br>
+            <label>Nomor HP: <input type="text" id="nomorHP" required></label><br><br>
 
-    <!-- Tombol Pembayaran -->
-    <h3>Pilih Metode Pembayaran:</h3>
-    <button onclick="bayarDANA()">Bayar dengan DANA</button>
-    <button onclick="comingSoon()">Bayar dengan OVO</button>
-    <button onclick="comingSoon()">Bayar dengan GOPAY</button>
+            <label>Pilih Paket:</label>
+            <select id="paket">
+                <option value="2">Bot by AC: 1 Hari - 2k</option>
+                <option value="10">Bot by AC: 1 Minggu - 10k</option>
+                <option value="40">Unban Batu - 40k</option>
+                <option value="20">Unban Spam - 20k</option>
+            </select><br><br>
+
+            <h3>Pilih Metode Pembayaran:</h3>
+            <button onclick="bayarDANA()">Bayar dengan DANA</button>
+            <button onclick="comingSoon()">Bayar dengan OVO</button>
+            <button onclick="comingSoon()">Bayar dengan GOPAY</button>
+        </div>
+    </div>
+
+    <!-- Form Admin Login -->
+    <div class="container" id="adminLogin" style="display: none;">
+        <h2>Login Admin</h2>
+        <div class="form-container">
+            <label>Username: <input type="text" id="adminUser" required></label><br><br>
+            <label>Password: <input type="password" id="adminPass" required></label><br><br>
+            <button onclick="loginAdmin()">Login</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminPanel" style="display: none;">
+        <h2>Pesanan Masuk</h2>
+        <div id="orderList"></div>
+    </div>
+
+    <!-- Musik -->
+    <audio autoplay loop>
+        <source src="https://h.top4top.io/m_3366k5mud0.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
+        // Fungsi untuk bayar DANA otomatis
         function bayarDANA() {
+            const nama = document.getElementById('nama').value;
+            const nomorHP = document.getElementById('nomorHP').value;
             const paket = document.getElementById('paket').value;
             const nomorDANA = '085520790814';
 
-            // Membuat deeplink DANA otomatis
-            const deeplinkDANA = `https://link.dana.id/qr/4gpf6x?amount=${paket}&receiver=${nomorDANA}`;
-            
-            alert(`Mengalihkan ke pembayaran DANA sebesar ${paket}k`);
-            
-            // Simpan pesanan ke localStorage (untuk admin lihat)
+            if (!nama || !nomorHP) {
+                alert("Isi nama dan nomor HP terlebih dahulu!");
+                return;
+            }
+
+            // Simpan pesanan ke localStorage (untuk admin)
             const pesanan = JSON.parse(localStorage.getItem('pesanan')) || [];
-            pesanan.push({
-                nama: "Pelanggan", 
-                nomor: "085xxxx", 
-                paket: paket + "k", 
-                status: false
-            });
+            pesanan.push({ nama, nomorHP, paket, status: false });
             localStorage.setItem('pesanan', JSON.stringify(pesanan));
-            
-            // Buka aplikasi DANA
+
+            // Notifikasi pesanan baru
+            tampilkanNotifikasi();
+
+            // Deeplink DANA (otomatis masuk aplikasi)
+            const deeplinkDANA = `https://link.dana.id/qr/4gpf6x?amount=${paket}&receiver=${nomorDANA}`;
+            alert(`Mengalihkan ke pembayaran DANA sebesar ${paket}k`);
             window.location.href = deeplinkDANA;
         }
 
+        // Fungsi notifikasi otomatis
+        function tampilkanNotifikasi() {
+            const notif = document.getElementById('notif');
+            notif.style.display = 'block';
+            setTimeout(() => notif.style.display = 'none', 5000);
+        }
+
+        // Untuk metode OVO & GoPay
         function comingSoon() {
             alert("Metode ini akan segera hadir!");
         }
+
+        // Admin login
+        function loginAdmin() {
+            const user = document.getElementById('adminUser').value;
+            const pass = document.getElementById('adminPass').value;
+
+            if (user === 'actzy909' && pass === '3Z^Yk~HaKd6M-spj>PoC') {
+                alert('Login berhasil! Anda dapat memantau pembayaran.');
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                tampilkanPesanan();
+            } else {
+                alert('Login gagal. Coba lagi!');
+            }
+        }
+
+        // Menampilkan pesanan di admin panel
+        function tampilkanPesanan() {
+            const pesanan = JSON.parse(localStorage.getItem('pesanan')) || [];
+            const orderList = document.getElementById('orderList');
+            orderList.innerHTML = '';
+
+            pesanan.forEach((item, index) => {
+                orderList.innerHTML += `
+                    <div>
+                        <p><strong>Nama:</strong> ${item.nama}</p>
+                        <p><strong>Nomor HP:</strong> ${item.nomorHP}</p>
+                        <p><strong>Paket:</strong> ${item.paket}k</p>
+                        <p><strong>Status:</strong> ${item.status ? 'Lunas' : 'Menunggu pembayaran'}</p>
+                        <button onclick="konfirmasiPembayaran(${index})">Konfirmasi</button>
+                        <hr>
+                    </div>
+                `;
+            });
+        }
+
+        // Konfirmasi pembayaran
+        function konfirmasiPembayaran(index) {
+            const pesanan = JSON.parse(localStorage.getItem('pesanan')) || [];
+            pesanan[index].status = true;
+            localStorage.setItem('pesanan', JSON.stringify(pesanan));
+            alert('Pembayaran dikonfirmasi!');
+            tampilkanPesanan();
+        }
+
+        // Buka halaman admin
+        window.onload = function () {
+            document.getElementById('adminLogin').style.display = 'block';
+        };
     </script>
 
 </body>
 
-</html>
+        </html>
