@@ -10,14 +10,13 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             background: url('img/logo.webp') no-repeat center center/cover;
             color: white;
+            text-align: center;
             overflow: hidden;
         }
 
         .container {
-            text-align: center;
             margin-top: 50px;
         }
 
@@ -29,103 +28,58 @@
         }
 
         button {
-            background-color: #4CAF50;
+            background: #4CAF50;
             color: white;
             cursor: pointer;
-            transition: 0.3s;
         }
 
         button:hover {
-            background-color: #45a049;
-            transform: scale(1.05);
-        }
-
-        #falling-stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+            background: #45a049;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Dashboard Order</h1>
-
-        <!-- Pilihan Paket -->
-        <select id="package">
-            <option value="Bot by AC: 1 Hari - 2k">Bot by AC: 1 Hari - 2k</option>
-            <option value="Bot by AC: 1 Minggu - 10k">Bot by AC: 1 Minggu - 10k</option>
-            <option value="Bot by AC: 1 Bulan - 40k">Bot by AC: 1 Bulan - 40k</option>
-            <option value="Unban WA: Unban Batu - 40k">Unban WA: Unban Batu - 40k</option>
-            <option value="Unban WA: Unban Spam - 20k">Unban WA: Unban Spam - 20k</option>
-        </select>
-
-        <!-- Tombol Pesan -->
-        <button onclick="sendOrder()">Pesan Sekarang</button>
-    </div>
-
-    <!-- Musik Latar -->
-    <audio id="bg-music" autoplay loop>
+    <audio autoplay loop>
         <source src="https://h.top4top.io/m_3366k5mud0.mp3" type="audio/mpeg">
-        Browser Anda tidak mendukung tag audio.
+        Browser Anda tidak mendukung pemutaran audio.
     </audio>
 
-    <!-- Efek Bintang Jatuh -->
-    <div id="falling-stars"></div>
+    <div class="container">
+        <h2>Dashboard Order</h2>
+
+        <select id="paket">
+            <option value="2k">Bot by AC: 1 Hari - 2k</option>
+            <option value="10k">Bot by AC: 1 Minggu - 10k</option>
+            <option value="40k">Unban WA: Unban Batu - 40k</option>
+            <option value="20k">Unban WA: Unban Spam - 20k</option>
+        </select>
+
+        <select id="pembayaran">
+            <option value="dana">DANA</option>
+            <option value="ovo">OVO (Coming Soon)</option>
+            <option value="gopay">GOPAY (Coming Soon)</option>
+        </select>
+
+        <button onclick="pesanSekarang()">Pesan Sekarang</button>
+    </div>
 
     <script>
-        function sendOrder() {
-            const package = document.getElementById("package").value;
-            const message = `Bang AC order jadi ${package}`;
-            window.open(`https://wa.me/6285520790814?text=${encodeURIComponent(message)}`, "_blank");
-        }
+        function pesanSekarang() {
+            const paket = document.getElementById('paket').value;
+            const pembayaran = document.getElementById('pembayaran').value;
 
-        // Mainkan musik otomatis setelah interaksi pengguna
-        document.addEventListener("click", () => {
-            const audio = document.getElementById("bg-music");
-            if (audio.paused) {
-                audio.play().catch(console.error);
+            if (pembayaran === 'dana') {
+                const urlDANA = `https://link.dana.id/qr/whatsapp?phone=6285520790814&amount=${paket.replace('k', '000')}`;
+                window.location.href = urlDANA;
+            } else {
+                alert(pembayaran + " - Coming Soon!");
             }
-        });
 
-        // Efek Bintang Jatuh
-        function createStar() {
-            const star = document.createElement("div");
-            star.className = "star";
-            star.style.left = `${Math.random() * 100}vw`;
-            star.style.animationDuration = `${Math.random() * 3 + 2}s`;
-            document.getElementById("falling-stars").appendChild(star);
-
-            setTimeout(() => star.remove(), 5000);
+            const pesanWA = `Bang AC order jadi ${document.getElementById('paket').options[document.getElementById('paket').selectedIndex].text}`;
+            window.open(`https://wa.me/6285520790814?text=${encodeURIComponent(pesanWA)}`);
         }
-
-        setInterval(createStar, 300);
     </script>
-
-    <style>
-        .star {
-            position: absolute;
-            top: 0;
-            width: 2px;
-            height: 2px;
-            background: white;
-            opacity: 0.8;
-            animation: fall linear;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
-                opacity: 0;
-            }
-        }
-    </style>
-
 </body>
 
 </html>
