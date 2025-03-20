@@ -25,17 +25,6 @@
             cursor: pointer;
         }
 
-        #notif {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #ff4757;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            display: none;
-        }
-
         .form-container {
             background: rgba(0, 0, 0, 0.7);
             padding: 20px;
@@ -47,10 +36,7 @@
 
 <body>
 
-    <!-- Notifikasi -->
-    <div id="notif">Pesanan baru diterima!</div>
-
-    <!-- Formulir -->
+    <!-- Dashboard Order -->
     <div class="container">
         <h2>Dashboard Order</h2>
         <div class="form-container">
@@ -73,7 +59,7 @@
     </div>
 
     <!-- Form Admin Login -->
-    <div class="container" id="adminLogin" style="display: none;">
+    <div class="container" id="adminLogin">
         <h2>Login Admin</h2>
         <div class="form-container">
             <label>Username: <input type="text" id="adminUser" required></label><br><br>
@@ -81,17 +67,6 @@
             <button onclick="loginAdmin()">Login</button>
         </div>
     </div>
-
-    <!-- Admin Dashboard -->
-    <div id="adminPanel" style="display: none;">
-        <h2>Pesanan Masuk</h2>
-        <div id="orderList"></div>
-    </div>
-
-    <!-- Musik -->
-    <audio autoplay loop>
-        <source src="https://h.top4top.io/m_3366k5mud0.mp3" type="audio/mpeg">
-    </audio>
 
     <script>
         // Fungsi untuk bayar DANA otomatis
@@ -106,82 +81,39 @@
                 return;
             }
 
-            // Simpan pesanan ke localStorage (untuk admin)
-            const pesanan = JSON.parse(localStorage.getItem('pesanan')) || [];
-            pesanan.push({ nama, nomorHP, paket, status: false });
-            localStorage.setItem('pesanan', JSON.stringify(pesanan));
+            // Simpan data pesanan
+            const pesanWA = `Bang AC order: ${document.getElementById('paket').selectedOptions[0].text} atas nama ${nama}, No. HP: ${nomorHP}`;
+            const linkWA = `https://wa.me/6285520790814?text=${encodeURIComponent(pesanWA)}`;
 
-            // Notifikasi pesanan baru
-            tampilkanNotifikasi();
-
-            // Deeplink DANA (otomatis masuk aplikasi)
+            // Deeplink DANA (otomatis ke aplikasi)
             const deeplinkDANA = `https://link.dana.id/qr/4gpf6x?amount=${paket}&receiver=${nomorDANA}`;
             alert(`Mengalihkan ke pembayaran DANA sebesar ${paket}k`);
+
+            // Arahkan ke DANA setelah itu otomatis ke WA
             window.location.href = deeplinkDANA;
+            setTimeout(() => window.location.href = linkWA, 5000);
         }
 
-        // Fungsi notifikasi otomatis
-        function tampilkanNotifikasi() {
-            const notif = document.getElementById('notif');
-            notif.style.display = 'block';
-            setTimeout(() => notif.style.display = 'none', 5000);
-        }
-
-        // Untuk metode OVO & GoPay
+        // Fungsi untuk metode pembayaran "Coming Soon"
         function comingSoon() {
             alert("Metode ini akan segera hadir!");
         }
 
-        // Admin login
+        // Fungsi untuk login Admin
         function loginAdmin() {
             const user = document.getElementById('adminUser').value;
             const pass = document.getElementById('adminPass').value;
 
+            // Kredensial admin
             if (user === 'actzy909' && pass === '3Z^Yk~HaKd6M-spj>PoC') {
-                alert('Login berhasil! Anda dapat memantau pembayaran.');
-                document.getElementById('adminLogin').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                tampilkanPesanan();
+                alert('Login berhasil! Arahkan ke halaman admin.');
+                window.location.href = 'admin.html'; // Buat halaman admin terpisah
             } else {
                 alert('Login gagal. Coba lagi!');
             }
         }
-
-        // Menampilkan pesanan di admin panel
-        function tampilkanPesanan() {
-            const pesanan = JSON.parse(localStorage.getItem('pesanan')) || [];
-            const orderList = document.getElementById('orderList');
-            orderList.innerHTML = '';
-
-            pesanan.forEach((item, index) => {
-                orderList.innerHTML += `
-                    <div>
-                        <p><strong>Nama:</strong> ${item.nama}</p>
-                        <p><strong>Nomor HP:</strong> ${item.nomorHP}</p>
-                        <p><strong>Paket:</strong> ${item.paket}k</p>
-                        <p><strong>Status:</strong> ${item.status ? 'Lunas' : 'Menunggu pembayaran'}</p>
-                        <button onclick="konfirmasiPembayaran(${index})">Konfirmasi</button>
-                        <hr>
-                    </div>
-                `;
-            });
-        }
-
-        // Konfirmasi pembayaran
-        function konfirmasiPembayaran(index) {
-            const pesanan = JSON.parse(localStorage.getItem('pesanan')) || [];
-            pesanan[index].status = true;
-            localStorage.setItem('pesanan', JSON.stringify(pesanan));
-            alert('Pembayaran dikonfirmasi!');
-            tampilkanPesanan();
-        }
-
-        // Buka halaman admin
-        window.onload = function () {
-            document.getElementById('adminLogin').style.display = 'block';
-        };
     </script>
 
 </body>
 
-        </html>
+</html>
