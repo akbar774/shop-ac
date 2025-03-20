@@ -1,28 +1,24 @@
-{
-    "admin": {
-        "username": "actzy909",
-        "password": "3Z^Yk~HaKd6M-spj>PoC"
-    },
-    "paket": [
-        {
-            "nama": "Bot by AC: 1 Hari - 2k",
-            "harga": 2000
-        },
-        {
-            "nama": "Bot by AC: 1 Minggu - 10k",
-            "harga": 10000
-        },
-        {
-            "nama": "Bot by AC: 1 Bulan - 40k",
-            "harga": 40000
-        },
-        {
-            "nama": "Unban by AC: Batu - 40k",
-            "harga": 40000
-        },
-        {
-            "nama": "Unban by AC: Spam - 20k",
-            "harga": 20000
-        }
-    ]
+// database.js
+
+const users = [
+    { username: 'actzy909', password: '3Z^Yk~HaKd6M-spj>PoC' },
+    { username: 'user1', password: 'password1' },
+    { username: 'user2', password: 'password2' }
+];
+
+const packages = [
+    { name: 'Bot by AC: 1 Hari - 2k', price: 2000 },
+    { name: 'Bot by AC: 1 Minggu - 10k', price: 10000 },
+    { name: 'Bot by AC: 1 Bulan - 40k', price: 40000 },
+    { name: 'Unban by AC: Batu - 40k', price: 40000 },
+    { name: 'Unban by AC: Spam - 20k', price: 20000 },
+    { name: 'Paket Premium - 100k', price: 100000 }
+];
+
+function cekLogin(username, password) {
+    return users.some(user => user.username === username && user.password === password);
 }
+
+function getPackages() {
+    return packages;
+    }
