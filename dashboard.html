@@ -1,55 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login ke Dashboard</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background: #333;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            color: white;
+        }
+
+        .container img {
+            width: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        p {
+            margin-top: 1rem;
+        }
+
+        a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <h2>Selamat Datang di Dashboard</h2>
-
-        <!-- Menu Filter (List Pesanan ke WhatsApp) -->
-        <div class="order-section">
-            <h3>Pesan Layanan:</h3>
-
-            <!-- Jadi Bot -->
-            <h4>🤖 Jadi Bot:</h4>
-            <ul>
-                <li>
-                    <a href="https://wa.me/6285520790814?text=Hallo%20bang%20ac%20saya%20mau%20pesan%20jadi%20bot%201hari%202k"
-                        target="_blank">✅ 1 Hari - 2K</a>
-                </li>
-                <li>
-                    <a href="https://wa.me/6285520790814?text=Hallo%20bang%20ac%20saya%20mau%20pesan%20jadi%20bot%201minggu%2010k"
-                        target="_blank">✅ 1 Minggu - 10K</a>
-                </li>
-                <li>
-                    <a href="https://wa.me/6285520790814?text=Hallo%20bang%20ac%20saya%20mau%20pesan%20jadi%20bot%201bulan%2030k"
-                        target="_blank">✅ 1 Bulan - 30K</a>
-                </li>
-            </ul>
-
-            <!-- Unban & Spam -->
-            <h4>🔓 Unban & Spam:</h4>
-            <ul>
-                <li>
-                    <a href="https://wa.me/6285520790814?text=Hallo%20bang%20ac%20saya%20mau%20mesan%20unban%20batu%2040k"
-                        target="_blank">🔓 Unban Batu - 40K</a>
-                </li>
-                <li>
-                    <a href="https://wa.me/6285520790814?text=Hallo%20bang%20ac%20saya%20mau%20mesan%20spam%2020k"
-                        target="_blank">📤 Spam - 20K</a>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Tombol Logout -->
-        <a href="index.html" class="logout-btn">Logout</a>
+        <img src="assets/avatar.png" alt="Avatar">
+        <h2>Login ke Dashboard</h2>
+        <form action="dashboard.html" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            
+            <!-- Dropdown Filter -->
+            <select name="filter" required>
+                <option value="">Pilih Filter</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+                <option value="guest">Guest</option>
+            </select>
+            
+            <button type="submit">Login</button>
+        </form>
+        <p>Belum punya akun? <a href="signup.html">Signup</a></p>
     </div>
-
 </body>
 
 </html>
