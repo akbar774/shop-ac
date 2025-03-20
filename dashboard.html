@@ -41,7 +41,7 @@
             z-index: 1;
         }
 
-        select, input, button {
+        select, button {
             padding: 10px;
             margin: 10px;
             border: none;
@@ -69,13 +69,12 @@
 
     <div class="container">
         <h2>Dashboard Order</h2>
-        <input type="text" placeholder="Cari paket...">
-        <select>
-            <option>Bot by AC: 1 Hari - 2k</option>
-            <option>Bot by AC: 1 Minggu - 10k</option>
-            <option>Bot by AC: 1 Bulan - 30k</option>
-            <option>Unban WA: Unban Batu - 40k</option>
-            <option>Unban WA: Unban Spam - 20k</option>
+        <select id="orderOption">
+            <option value="Bot by AC: 1 Hari - 2k">Bot by AC: 1 Hari - 2k</option>
+            <option value="Bot by AC: 1 Minggu - 10k">Bot by AC: 1 Minggu - 10k</option>
+            <option value="Bot by AC: 1 Bulan - 30k">Bot by AC: 1 Bulan - 30k</option>
+            <option value="Unban WA: Unban Batu - 40k">Unban WA: Unban Batu - 40k</option>
+            <option value="Unban WA: Unban Spam - 20k">Unban WA: Unban Spam - 20k</option>
         </select>
         <button onclick="order()">Pesan Sekarang</button>
     </div>
@@ -87,7 +86,10 @@
 
     <script>
         function order() {
-            alert("Pesanan kamu sedang diproses!");
+            const option = document.getElementById('orderOption').value;
+            const nomorWA = "6285520790814";
+            const pesan = `Bang AC, order ${option}`;
+            window.open(`https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`, '_blank');
         }
 
         particlesJS("particles-js", {
