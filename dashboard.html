@@ -16,7 +16,7 @@
         }
 
         .container {
-            margin-top: 100px;
+            margin-top: 50px;
         }
 
         button {
@@ -45,10 +45,11 @@
 
             <label>Pilih Paket:</label>
             <select id="paket">
-                <option value="2">Bot by AC: 1 Hari - 2k</option>
-                <option value="10">Bot by AC: 1 Minggu - 10k</option>
-                <option value="40">Unban Batu - 40k</option>
-                <option value="20">Unban Spam - 20k</option>
+                <option value="2000">Bot by AC: 1 Hari - 2k</option>
+                <option value="10000">Bot by AC: 1 Minggu - 10k</option>
+                <option value="20000">Bot by AC: 1 Bulan - 20k</option>
+                <option value="40000">Unban Batu - 40k</option>
+                <option value="20000">Unban Spam - 20k</option>
             </select><br><br>
 
             <h3>Pilih Metode Pembayaran:</h3>
@@ -69,7 +70,7 @@
     </div>
 
     <script>
-        // Fungsi untuk bayar DANA otomatis
+        // Fungsi untuk bayar otomatis ke aplikasi DANA
         function bayarDANA() {
             const nama = document.getElementById('nama').value;
             const nomorHP = document.getElementById('nomorHP').value;
@@ -77,26 +78,36 @@
             const nomorDANA = '085520790814';
 
             if (!nama || !nomorHP) {
-                alert("Isi nama dan nomor HP terlebih dahulu!");
+                alert("Harap isi nama dan nomor HP terlebih dahulu!");
                 return;
             }
 
-            // Simpan data pesanan
-            const pesanWA = `Bang AC order: ${document.getElementById('paket').selectedOptions[0].text} atas nama ${nama}, No. HP: ${nomorHP}`;
+            // Simpan data pesanan untuk admin (localStorage)
+            const orderData = {
+                nama: nama,
+                nomorHP: nomorHP,
+                paket: document.getElementById('paket').selectedOptions[0].text,
+                jumlah: paket
+            };
+            localStorage.setItem('pesanan', JSON.stringify(orderData));
+
+            // Kirim pesan otomatis ke WhatsApp
+            const pesanWA = `Bang AC order: ${orderData.paket} atas nama ${nama}, No. HP: ${nomorHP}`;
             const linkWA = `https://wa.me/6285520790814?text=${encodeURIComponent(pesanWA)}`;
 
-            // Deeplink DANA (otomatis ke aplikasi)
+            // Deeplink ke aplikasi DANA
             const deeplinkDANA = `https://link.dana.id/qr/4gpf6x?amount=${paket}&receiver=${nomorDANA}`;
-            alert(`Mengalihkan ke pembayaran DANA sebesar ${paket}k`);
 
-            // Arahkan ke DANA setelah itu otomatis ke WA
+            alert(`Mengalihkan ke pembayaran DANA sebesar ${paket / 1000}k`);
             window.location.href = deeplinkDANA;
+
+            // Setelah 5 detik, buka WhatsApp otomatis
             setTimeout(() => window.location.href = linkWA, 5000);
         }
 
-        // Fungsi untuk metode pembayaran "Coming Soon"
+        // Fungsi untuk metode pembayaran OVO & GOPAY (Coming Soon)
         function comingSoon() {
-            alert("Metode ini akan segera hadir!");
+            alert("Metode pembayaran ini akan segera tersedia!");
         }
 
         // Fungsi untuk login Admin
@@ -106,8 +117,8 @@
 
             // Kredensial admin
             if (user === 'actzy909' && pass === '3Z^Yk~HaKd6M-spj>PoC') {
-                alert('Login berhasil! Arahkan ke halaman admin.');
-                window.location.href = 'admin.html'; // Buat halaman admin terpisah
+                alert('Login berhasil! Mengarahkan ke halaman admin.');
+                window.location.href = 'admin.html'; // Pastikan halaman admin tersedia
             } else {
                 alert('Login gagal. Coba lagi!');
             }
