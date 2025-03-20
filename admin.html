@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <h2>Login Admin</h2>
+    <form id="adminForm">
+        <label>Username: <input type="text" id="username" required></label><br>
+        <label>Password: <input type="password" id="password" required></label><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        document.getElementById('adminForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (user === 'actzy909' && pass === '3Z^Yk~HaKd6M-spj>PoC') {
+                alert('Login berhasil! Anda dapat memantau pembayaran.');
+                // Buka halaman monitoring (bisa ditambahkan di sini)
+            } else {
+                alert('Login gagal. Coba lagi!');
+            }
+        });
+    </script>
+</body>
+</html>
