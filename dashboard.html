@@ -5,25 +5,20 @@
     <meta charset="UTF-8">
     <title>Dashboard Order</title>
     <link rel="stylesheet" href="style.css">
+    <script src="database.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <!-- Logo -->
-        <div class="logo">
-            <img src="img/logo.webp" alt="Logo" width="100">
-        </div>
-
-        <!-- Form Order -->
         <h2>Dashboard Order</h2>
 
+        <!-- Form Data Pemesan -->
         <label for="nama">Nama:</label>
-        <input type="text" id="nama" placeholder="Masukkan Nama">
+        <input type="text" id="nama" placeholder="Masukkan Nama" required>
 
         <label for="nomor">Nomor HP:</label>
-        <input type="text" id="nomor" placeholder="Masukkan Nomor HP">
+        <input type="text" id="nomor" placeholder="Masukkan Nomor HP" required>
 
-        <!-- Pilihan Paket dari db.json -->
         <label for="paket">Pilih Paket:</label>
         <select id="paket"></select>
 
@@ -32,37 +27,28 @@
         <button onclick="bayarDANA()">Bayar dengan DANA</button>
         <button disabled>Bayar dengan OVO (Coming Soon)</button>
         <button disabled>Bayar dengan GOPAY (Coming Soon)</button>
-
-        <!-- Link ke Admin Panel -->
-        <a href="admin.html" id="adminLink">Login Admin</a>
     </div>
 
-    <script src="admin.js"></script>
+    <script src="database.js"></script>
     <script>
-        // Muat data paket dari db.json
-        async function muatPaket() {
-            try {
-                const response = await fetch('db.json');
-                const data = await response.json();
-                const paketSelect = document.getElementById('paket');
+        // Menampilkan daftar paket secara otomatis dari database.js
+        document.addEventListener('DOMContentLoaded', function () {
+            const paketDropdown = document.getElementById('paket');
+            const paketList = getPackages();
 
-                data.paket.forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = `${item.nama}`;
-                    option.textContent = `${item.nama}`;
-                    paketSelect.appendChild(option);
-                });
-            } catch (error) {
-                alert('Gagal memuat paket!');
-                console.error('Error:', error);
-            }
-        }
+            paketList.forEach(paket => {
+                const option = document.createElement('option');
+                option.value = JSON.stringify(paket);
+                option.textContent = `${paket.name} - Rp ${paket.price.toLocaleString()}`;
+                paketDropdown.appendChild(option);
+            });
+        });
 
-        // Fungsi Pembayaran DANA
+        // Fungsi pembayaran via DANA
         function bayarDANA() {
-            const nama = document.getElementById('nama').value.trim();
-            const nomor = document.getElementById('nomor').value.trim();
-            const paket = document.getElementById('paket').value;
+            const nama = document.getElementById('nama').value;
+            const nomor = document.getElementById('nomor').value;
+            const paketData = JSON.parse(document.getElementById('paket').value);
 
             if (!nama || !nomor) {
                 alert('Harap isi nama dan nomor HP!');
@@ -70,14 +56,18 @@
             }
 
             // Kirim pesanan ke WhatsApp
-            const pesan = `Bang AC order jadi ${paket}, Nama: ${nama}, No: ${nomor}`;
+            const pesan = `Bang AC order jadi ${paketData.name}, Nama: ${nama}, No: ${nomor}`;
             window.open(`https://wa.me/6285520790814?text=${encodeURIComponent(pesan)}`, '_blank');
 
-            alert('Harap tunggu beberapa menit untuk proses!');
-        }
+            // Format jumlah pembayaran DANA
+            const jumlahPembayaran = paketData.price;
+            const nomorDANA = '085520790814';
+            const linkDANA = `https://link.dana.id/qr/2z0b4d90?amount=${jumlahPembayaran}&phone=${nomorDANA}`;
 
-        // Panggil fungsi muat paket saat halaman dimuat
-        window.onload = muatPaket;
+            // Buka aplikasi DANA dengan nominal yang sesuai
+            window.open(linkDANA, '_blank');
+            alert(`Anda akan diarahkan ke aplikasi DANA untuk membayar Rp ${jumlahPembayaran.toLocaleString()}.`);
+        }
     </script>
 
 </body>
