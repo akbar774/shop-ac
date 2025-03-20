@@ -3,67 +3,85 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Order - Shop AC</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!-- Container Utama -->
     <div class="container">
+
         <!-- Logo -->
         <div class="logo">
-            <img src="img/logo.webp" alt="Logo" width="100">
+            <img src="img/logo.webp" alt="Logo Shop AC" width="120">
         </div>
 
-        <!-- Form Order -->
+        <!-- Judul Dashboard -->
         <h2>Dashboard Order</h2>
-        <label for="nama">Nama:</label>
-        <input type="text" id="nama" placeholder="Masukkan Nama">
 
-        <label for="nomor">Nomor HP:</label>
-        <input type="text" id="nomor" placeholder="Masukkan Nomor HP">
+        <!-- Formulir Pemesanan -->
+        <form id="orderForm">
+            <!-- Input Nama -->
+            <label for="nama">Nama:</label>
+            <input type="text" id="nama" placeholder="Masukkan Nama" required>
 
-        <label for="paket">Pilih Paket:</label>
-        <select id="paket">
-            <option value="Bot by AC: 1 Hari - 2k">Bot by AC: 1 Hari - 2k</option>
-            <option value="Bot by AC: 1 Minggu - 10k">Bot by AC: 1 Minggu - 10k</option>
-            <option value="Bot by AC: 1 Bulan - 40k">Bot by AC: 1 Bulan - 40k</option>
-            <option value="Unban by AC: Batu - 40k">Unban by AC: Batu - 40k</option>
-            <option value="Unban by AC: Spam - 20k">Unban by AC: Spam - 20k</option>
-        </select>
+            <!-- Input Nomor HP -->
+            <label for="nomor">Nomor HP:</label>
+            <input type="text" id="nomor" placeholder="Masukkan Nomor HP" required>
 
-        <!-- Metode Pembayaran -->
-        <h3>Pilih Metode Pembayaran:</h3>
-        <button onclick="bayarDANA()">Bayar dengan DANA</button>
-        <button disabled>Bayar dengan OVO (Coming Soon)</button>
-        <button disabled>Bayar dengan GOPAY (Coming Soon)</button>
+            <!-- Pilih Paket -->
+            <label for="paket">Pilih Paket:</label>
+            <select id="paket" required>
+                <option value="Bot by AC: 1 Hari - 2k">Bot by AC: 1 Hari - 2k</option>
+                <option value="Bot by AC: 1 Minggu - 10k">Bot by AC: 1 Minggu - 10k</option>
+                <option value="Bot by AC: 1 Bulan - 40k">Bot by AC: 1 Bulan - 40k</option>
+                <option value="Unban by AC: Batu - 40k">Unban by AC: Batu - 40k</option>
+                <option value="Unban by AC: Spam - 20k">Unban by AC: Spam - 20k</option>
+            </select>
 
-        <!-- Link Admin (Tersembunyi) -->
-        <a href="admin.html" style="display: none;" id="adminLink">Admin Panel</a>
+            <!-- Pilihan Metode Pembayaran -->
+            <h3>Pilih Metode Pembayaran:</h3>
+
+            <!-- Tombol Pembayaran -->
+            <button type="button" onclick="bayarDANA()">Bayar dengan DANA</button>
+            <button type="button" disabled>Bayar dengan OVO (Coming Soon)</button>
+            <button type="button" disabled>Bayar dengan GOPAY (Coming Soon)</button>
+        </form>
+
+        <!-- Link Admin (Terlihat di Bawah) -->
+        <div class="admin-link">
+            <a href="admin.html">➤ Masuk sebagai Admin</a>
+        </div>
     </div>
 
+    <!-- Skrip Utama -->
     <script>
         // Fungsi pembayaran via DANA
         function bayarDANA() {
-            const nama = document.getElementById('nama').value;
-            const nomor = document.getElementById('nomor').value;
+            const nama = document.getElementById('nama').value.trim();
+            const nomor = document.getElementById('nomor').value.trim();
             const paket = document.getElementById('paket').value;
 
+            // Validasi input
             if (!nama || !nomor) {
                 alert('Harap isi nama dan nomor HP!');
                 return;
             }
 
-            // Kirim pesanan ke WhatsApp
+            // Format pesan untuk WhatsApp
             const pesan = `Bang AC order jadi ${paket}, Nama: ${nama}, No: ${nomor}`;
-            window.open(`https://wa.me/6285520790814?text=${encodeURIComponent(pesan)}`, '_blank');
+            const waURL = `https://wa.me/6285520790814?text=${encodeURIComponent(pesan)}`;
 
-            alert('Harap tunggu beberapa menit untuk proses!');
+            // Buka WhatsApp dan tampilkan notifikasi
+            window.open(waURL, '_blank');
+            alert('Pesanan berhasil dikirim. Harap tunggu beberapa menit untuk proses!');
         }
 
-        // Kombinasi CTRL + A untuk membuka halaman admin
+        // Buka halaman admin dengan CTRL + A
         document.addEventListener('keydown', function (event) {
             if (event.ctrlKey && event.key === 'a') {
-                document.getElementById('adminLink').click();
+                window.location.href = 'admin.html';
             }
         });
     </script>
