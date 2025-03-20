@@ -3,192 +3,149 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard AC</title>
+    <title>Dashboard - Shop AC</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: Arial, sans-serif;
-            color: white;
-            text-align: center;
-            overflow: hidden;
             background: url('img/logo.webp') no-repeat center center/cover;
+            color: white;
+            overflow-x: hidden;
         }
 
         .container {
-            margin-top: 50px;
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
         }
 
         h1 {
-            animation: glow 1.5s infinite alternate;
-        }
-
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 10px cyan, 0 0 20px cyan;
-            }
-
-            to {
-                text-shadow: 0 0 20px cyan, 0 0 30px cyan;
-            }
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
         }
 
         .btn {
-            padding: 10px 20px;
-            margin: 10px;
+            display: block;
+            width: 80%;
+            margin: 10px auto;
+            padding: 15px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
+            transition: 0.3s;
         }
 
-        .btn-shop {
-            background-color: #4CAF50;
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .dana {
+            background: #008CFF;
             color: white;
         }
 
-        .btn-shop:hover {
-            background-color: #45a049;
-        }
-
-        .btn-payment {
-            background-color: #2196F3;
+        .gopay, .ovo {
+            background: #666;
             color: white;
         }
 
-        .btn-payment:hover {
-            background-color: #1976D2;
-        }
-
-        .falling-stars {
-            position: absolute;
-            width: 2px;
-            height: 40px;
-            background: white;
-            opacity: 0.7;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            from {
-                transform: translateY(-100vh);
-            }
-
-            to {
-                transform: translateY(100vh);
-            }
-        }
-
-        #orderForm {
-            display: none;
-            margin-top: 20px;
-        }
-
-        input {
-            padding: 10px;
-            margin: 10px;
-            border: none;
-            border-radius: 5px;
-        }
-
-        #notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4CAF50;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
+        .hidden {
             display: none;
         }
     </style>
 </head>
 
 <body>
-    <div id="notification">Ada pesanan baru!</div>
 
-    <div class="container">
-        <h1>Dashboard AC</h1>
+<div class="container">
+    <h1>Shop by AC</h1>
 
-        <h2>Bot by AC</h2>
-        <button class="btn btn-shop" onclick="showForm('Bot 1 Hari', 2000)">1 Hari (2k)</button>
-        <button class="btn btn-shop" onclick="showForm('Bot 1 Minggu', 10000)">1 Minggu (10k)</button>
-        <button class="btn btn-shop" onclick="showForm('Bot 1 Bulan', 30000)">1 Bulan (30k)</button>
+    <!-- Formulir Pengisian Data -->
+    <form id="orderForm">
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" name="nama" required placeholder="Masukkan Nama"><br><br>
 
-        <h2>Unban by AC</h2>
-        <button class="btn btn-shop" onclick="showForm('Unban Batu', 40000)">Batu (40k)</button>
-        <button class="btn btn-shop" onclick="showForm('Unban Spam', 20000)">Spam (20k)</button>
+        <label for="nomor">Nomor HP:</label>
+        <input type="text" id="nomor" name="nomor" required placeholder="Masukkan Nomor HP"><br><br>
 
-        <div id="orderForm">
-            <h3>Formulir Pemesanan</h3>
-            <input type="text" id="name" placeholder="Nama" required>
-            <input type="text" id="phone" placeholder="Nomor HP" required>
-            <button class="btn btn-payment" onclick="processOrder()">Proses Pesanan</button>
-        </div>
+        <h2>Pilih Paket</h2>
+        <button type="button" class="btn dana" onclick="prosesPesanan('Bot by AC - 1 Hari', 2000)">Bot by AC - 1 Hari (2k)</button>
+        <button type="button" class="btn dana" onclick="prosesPesanan('Bot by AC - 1 Minggu', 10000)">Bot by AC - 1 Minggu (10k)</button>
+        <button type="button" class="btn dana" onclick="prosesPesanan('Bot by AC - 1 Bulan', 30000)">Bot by AC - 1 Bulan (30k)</button>
 
-        <h2>Metode Pembayaran</h2>
-        <button class="btn btn-payment" onclick="payment('DANA')">DANA</button>
-        <button class="btn btn-payment" disabled>OVO (Coming Soon)</button>
-        <button class="btn btn-payment" disabled>GOPAY (Coming Soon)</button>
-    </div>
+        <button type="button" class="btn dana" onclick="prosesPesanan('Unban WA - Batu', 40000)">Unban WA - Batu (40k)</button>
+        <button type="button" class="btn dana" onclick="prosesPesanan('Unban WA - Spam', 20000)">Unban WA - Spam (20k)</button>
 
-    <audio id="bg-music" autoplay loop>
-        <source src="https://h.top4top.io/m_3366k5mud0.mp3" type="audio/mpeg">
-        Browser tidak mendukung audio.
-    </audio>
+        <h2>Pilih Metode Pembayaran</h2>
+        <button type="button" class="btn dana" onclick="bayarDana()">DANA (Otomatis)</button>
+        <button type="button" class="btn gopay">GOPAY (Coming Soon)</button>
+        <button type="button" class="btn ovo">OVO (Coming Soon)</button>
+    </form>
 
-    <script>
-        let selectedPackage = '';
-        let price = 0;
+    <br>
+    <a href="admin.html">Masuk sebagai Admin</a>
+</div>
 
-        function showForm(packageName, packagePrice) {
-            selectedPackage = packageName;
-            price = packagePrice;
-            document.getElementById('orderForm').style.display = 'block';
-        }
+<audio autoplay loop>
+    <source src="img/musik.mp3" type="audio/mp3">
+</audio>
 
-        function processOrder() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
+<script>
+    let paketTerpilih = '';
 
-            if (!name || !phone) {
-                Swal.fire('Error', 'Harap isi semua kolom!', 'error');
-                return;
-            }
-
-            Swal.fire('Pesanan Diproses', `Pesanan: ${selectedPackage}\nNama: ${name}\nNomor: ${phone}`, 'success');
-            showNotification();
-
-            setTimeout(() => {
-                window.location.href = `https://wa.me/6285520790814?text=Bang%20AC%20order%20${selectedPackage}%20${price}`;
-            }, 2000);
-        }
-
-        function payment(method) {
-            if (method === 'DANA') {
-                Swal.fire('Pembayaran DANA', 'Silakan transfer ke 085520790814 sesuai nominal yang dipilih.', 'info');
-            }
-        }
-
-        function showNotification() {
-            const notification = document.getElementById('notification');
-            notification.style.display = 'block';
-            setTimeout(() => notification.style.display = 'none', 5000);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            for (let i = 0; i < 50; i++) {
-                const star = document.createElement('div');
-                star.className = 'falling-stars';
-                star.style.left = `${Math.random() * window.innerWidth}px`;
-                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
-                document.body.appendChild(star);
-            }
+    function prosesPesanan(paket, harga) {
+        paketTerpilih = paket;
+        sessionStorage.setItem('paket', paket);
+        sessionStorage.setItem('harga', harga);
+        Swal.fire({
+            title: 'Paket Dipilih',
+            text: `${paket} - Rp ${harga.toLocaleString()}`,
+            icon: 'info',
+            timer: 3000,
+            showConfirmButton: false
         });
-    </script>
+    }
+
+    function bayarDana() {
+        const nama = document.getElementById('nama').value;
+        const nomor = document.getElementById('nomor').value;
+        const harga = sessionStorage.getItem('harga');
+
+        if (!nama || !nomor || !paketTerpilih) {
+            Swal.fire('Error', 'Harap lengkapi data dan pilih paket!', 'error');
+            return;
+        }
+
+        Swal.fire({
+            title: 'Pembayaran DANA',
+            html: `
+                <p>Nomor: 085520790814</p>
+                <p>Total: Rp ${harga}</p>
+                <p>Silakan lakukan pembayaran dan tunggu beberapa menit.</p>
+            `,
+            icon: 'success'
+        });
+
+        // Kirim notifikasi otomatis
+        if (Notification.permission === 'granted') {
+            new Notification('Pesanan Baru!', {
+                body: `${nama} memesan ${paketTerpilih}`,
+            });
+        } else {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    new Notification('Pesanan Baru!', {
+                        body: `${nama} memesan ${paketTerpilih}`,
+                    });
+                }
+            });
+        }
+    }
+</script>
 
 </body>
 
