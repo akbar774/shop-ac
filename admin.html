@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <title>Admin Dashboard</title>
 </head>
+
 <body>
     <h2>Login Admin</h2>
     <form id="adminForm">
@@ -11,19 +13,57 @@
         <button type="submit">Login</button>
     </form>
 
+    <div id="dashboard" style="display: none;">
+        <h2>Dashboard Pembayaran</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Nama</th>
+                    <th>Nomor HP</th>
+                    <th>Paket</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="orderList">
+                <!-- Data pesanan akan muncul di sini -->
+            </tbody>
+        </table>
+    </div>
+
     <script>
-        document.getElementById('adminForm').addEventListener('submit', function(e) {
+        document.getElementById('adminForm').addEventListener('submit', function (e) {
             e.preventDefault();
             const user = document.getElementById('username').value;
             const pass = document.getElementById('password').value;
 
             if (user === 'actzy909' && pass === '3Z^Yk~HaKd6M-spj>PoC') {
                 alert('Login berhasil! Anda dapat memantau pembayaran.');
-                // Buka halaman monitoring (bisa ditambahkan di sini)
+                document.getElementById('adminForm').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                tampilkanPesanan();
             } else {
                 alert('Login gagal. Coba lagi!');
             }
         });
+
+        // Fungsi untuk menampilkan pesanan dari localStorage
+        function tampilkanPesanan() {
+            const pesanan = JSON.parse(localStorage.getItem('pesanan')) || [];
+            const orderList = document.getElementById('orderList');
+            orderList.innerHTML = '';
+
+            pesanan.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.nama}</td>
+                    <td>${item.nomor}</td>
+                    <td>${item.paket}</td>
+                    <td>${item.status ? 'Sudah Bayar' : 'Belum Bayar'}</td>
+                `;
+                orderList.appendChild(row);
+            });
+        }
     </script>
 </body>
+
 </html>
