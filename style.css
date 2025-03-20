@@ -1,51 +1,79 @@
 /* Tampilan Dasar */
 body {
     font-family: Arial, sans-serif;
-    height: 100vh;
     margin: 0;
+    padding: 0;
+    height: 100vh;
     display: flex;
-    align-items: center;
     justify-content: center;
-
-    /* Mendukung Mode Terang dan Gelap */
-    background: #f4f4f9; /* Mode Terang (HEAD) */
-    color: black; /* Default untuk mode terang */
+    align-items: center;
+    background: #f4f4f9; /* Mode Terang */
+    color: black;
 }
 
-/* Dark Mode */
+/* Dark Mode (Otomatis di perangkat mode gelap) */
 @media (prefers-color-scheme: dark) {
     body {
-        background-color: #121212; /* Mode Gelap (59436b1) */
-        color: white; /* Teks jadi putih di mode gelap */
+        background: #121212;
+        color: white;
     }
 }
 
-/* Kontainer */
+/* Kontainer Form */
 .container {
     background: #fff;
     padding: 2rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    width: 100%;
+    border-radius: 12px;
     max-width: 400px;
+    width: 100%;
     text-align: center;
 }
 
-/* Formulir */
-label {
-    display: block;
+/* Dark Mode untuk Form */
+@media (prefers-color-scheme: dark) {
+    .container {
+        background: #1e1e1e;
+    }
+}
+
+/* Logo */
+.logo {
+    width: 100px;
+    margin-bottom: 1rem;
+}
+
+/* Input Form */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 /* Tombol */
 button {
     background: #007bff;
     color: white;
-    border: none;
     padding: 10px 20px;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 button:hover {
     background: #0056b3;
+}
+
+/* Link ke Signup */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
 }
