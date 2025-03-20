@@ -3,87 +3,81 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Order - Shop AC</title>
+    <title>Dashboard Order</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- Container Utama -->
     <div class="container">
-
         <!-- Logo -->
         <div class="logo">
-            <img src="img/logo.webp" alt="Logo Shop AC" width="120">
+            <img src="img/logo.webp" alt="Logo" width="100">
         </div>
 
-        <!-- Judul Dashboard -->
+        <!-- Form Order -->
         <h2>Dashboard Order</h2>
 
-        <!-- Formulir Pemesanan -->
-        <form id="orderForm">
-            <!-- Input Nama -->
-            <label for="nama">Nama:</label>
-            <input type="text" id="nama" placeholder="Masukkan Nama" required>
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" placeholder="Masukkan Nama">
 
-            <!-- Input Nomor HP -->
-            <label for="nomor">Nomor HP:</label>
-            <input type="text" id="nomor" placeholder="Masukkan Nomor HP" required>
+        <label for="nomor">Nomor HP:</label>
+        <input type="text" id="nomor" placeholder="Masukkan Nomor HP">
 
-            <!-- Pilih Paket -->
-            <label for="paket">Pilih Paket:</label>
-            <select id="paket" required>
-                <option value="Bot by AC: 1 Hari - 2k">Bot by AC: 1 Hari - 2k</option>
-                <option value="Bot by AC: 1 Minggu - 10k">Bot by AC: 1 Minggu - 10k</option>
-                <option value="Bot by AC: 1 Bulan - 40k">Bot by AC: 1 Bulan - 40k</option>
-                <option value="Unban by AC: Batu - 40k">Unban by AC: Batu - 40k</option>
-                <option value="Unban by AC: Spam - 20k">Unban by AC: Spam - 20k</option>
-            </select>
+        <!-- Pilihan Paket dari db.json -->
+        <label for="paket">Pilih Paket:</label>
+        <select id="paket"></select>
 
-            <!-- Pilihan Metode Pembayaran -->
-            <h3>Pilih Metode Pembayaran:</h3>
+        <!-- Metode Pembayaran -->
+        <h3>Pilih Metode Pembayaran:</h3>
+        <button onclick="bayarDANA()">Bayar dengan DANA</button>
+        <button disabled>Bayar dengan OVO (Coming Soon)</button>
+        <button disabled>Bayar dengan GOPAY (Coming Soon)</button>
 
-            <!-- Tombol Pembayaran -->
-            <button type="button" onclick="bayarDANA()">Bayar dengan DANA</button>
-            <button type="button" disabled>Bayar dengan OVO (Coming Soon)</button>
-            <button type="button" disabled>Bayar dengan GOPAY (Coming Soon)</button>
-        </form>
-
-        <!-- Link Admin (Terlihat di Bawah) -->
-        <div class="admin-link">
-            <a href="admin.html">➤ Masuk sebagai Admin</a>
-        </div>
+        <!-- Link ke Admin Panel -->
+        <a href="admin.html" id="adminLink">Login Admin</a>
     </div>
 
-    <!-- Skrip Utama -->
+    <script src="admin.js"></script>
     <script>
-        // Fungsi pembayaran via DANA
+        // Muat data paket dari db.json
+        async function muatPaket() {
+            try {
+                const response = await fetch('db.json');
+                const data = await response.json();
+                const paketSelect = document.getElementById('paket');
+
+                data.paket.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = `${item.nama}`;
+                    option.textContent = `${item.nama}`;
+                    paketSelect.appendChild(option);
+                });
+            } catch (error) {
+                alert('Gagal memuat paket!');
+                console.error('Error:', error);
+            }
+        }
+
+        // Fungsi Pembayaran DANA
         function bayarDANA() {
             const nama = document.getElementById('nama').value.trim();
             const nomor = document.getElementById('nomor').value.trim();
             const paket = document.getElementById('paket').value;
 
-            // Validasi input
             if (!nama || !nomor) {
                 alert('Harap isi nama dan nomor HP!');
                 return;
             }
 
-            // Format pesan untuk WhatsApp
+            // Kirim pesanan ke WhatsApp
             const pesan = `Bang AC order jadi ${paket}, Nama: ${nama}, No: ${nomor}`;
-            const waURL = `https://wa.me/6285520790814?text=${encodeURIComponent(pesan)}`;
+            window.open(`https://wa.me/6285520790814?text=${encodeURIComponent(pesan)}`, '_blank');
 
-            // Buka WhatsApp dan tampilkan notifikasi
-            window.open(waURL, '_blank');
-            alert('Pesanan berhasil dikirim. Harap tunggu beberapa menit untuk proses!');
+            alert('Harap tunggu beberapa menit untuk proses!');
         }
 
-        // Buka halaman admin dengan CTRL + A
-        document.addEventListener('keydown', function (event) {
-            if (event.ctrlKey && event.key === 'a') {
-                window.location.href = 'admin.html';
-            }
-        });
+        // Panggil fungsi muat paket saat halaman dimuat
+        window.onload = muatPaket;
     </script>
 
 </body>
