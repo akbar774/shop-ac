@@ -2,69 +2,72 @@
 <html lang="id">
 
 <head>
+    <meta charset="UTF-8">
     <title>Dashboard Order</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <div class="container">
-        <img src="img/logo.webp" alt="Logo" class="logo">
-
-        <div class="order-section">
-            <h2>Dashboard Order</h2>
-            <label>Nama:
-                <input type="text" id="nama" placeholder="Masukkan Nama" required>
-            </label><br>
-            <label>Nomor HP:
-                <input type="text" id="nomorHP" placeholder="Masukkan Nomor HP" required>
-            </label><br>
-            <label for="paket">Pilih Paket:
-                <select id="paket">
-                    <option value="Bot by AC: 1 Hari - 2k">Bot by AC: 1 Hari - 2k</option>
-                    <option value="Bot by AC: 1 Minggu - 10k">Bot by AC: 1 Minggu - 10k</option>
-                    <option value="Bot by AC: 1 Bulan">Bot by AC: 1 Bulan</option>
-                    <option value="Unban by AC: Batu - 40k">Unban by AC: Batu - 40k</option>
-                    <option value="Unban by AC: Spam - 20k">Unban by AC: Spam - 20k</option>
-                </select>
-            </label><br>
-
-            <h3>Pilih Metode Pembayaran:</h3>
-            <button onclick="bayarDANA()">Bayar dengan DANA</button>
-            <button disabled>Bayar dengan OVO (Coming Soon)</button>
-            <button disabled>Bayar dengan GOPAY (Coming Soon)</button>
+        <!-- Logo -->
+        <div class="logo">
+            <img src="img/logo.webp" alt="Logo" width="100">
         </div>
+
+        <!-- Form Order -->
+        <h2>Dashboard Order</h2>
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" placeholder="Masukkan Nama">
+
+        <label for="nomor">Nomor HP:</label>
+        <input type="text" id="nomor" placeholder="Masukkan Nomor HP">
+
+        <label for="paket">Pilih Paket:</label>
+        <select id="paket">
+            <option value="Bot by AC: 1 Hari - 2k">Bot by AC: 1 Hari - 2k</option>
+            <option value="Bot by AC: 1 Minggu - 10k">Bot by AC: 1 Minggu - 10k</option>
+            <option value="Bot by AC: 1 Bulan - 40k">Bot by AC: 1 Bulan - 40k</option>
+            <option value="Unban by AC: Batu - 40k">Unban by AC: Batu - 40k</option>
+            <option value="Unban by AC: Spam - 20k">Unban by AC: Spam - 20k</option>
+        </select>
+
+        <!-- Metode Pembayaran -->
+        <h3>Pilih Metode Pembayaran:</h3>
+        <button onclick="bayarDANA()">Bayar dengan DANA</button>
+        <button disabled>Bayar dengan OVO (Coming Soon)</button>
+        <button disabled>Bayar dengan GOPAY (Coming Soon)</button>
+
+        <!-- Link Admin (Tersembunyi) -->
+        <a href="admin.html" style="display: none;" id="adminLink">Admin Panel</a>
     </div>
 
     <script>
+        // Fungsi pembayaran via DANA
         function bayarDANA() {
             const nama = document.getElementById('nama').value;
-            const nomorHP = document.getElementById('nomorHP').value;
+            const nomor = document.getElementById('nomor').value;
             const paket = document.getElementById('paket').value;
 
-            if (!nama || !nomorHP) {
-                alert("Harap isi nama dan nomor HP terlebih dahulu.");
+            if (!nama || !nomor) {
+                alert('Harap isi nama dan nomor HP!');
                 return;
             }
 
-            // Format pesan untuk dikirim ke WhatsApp
-            const pesan = `Bang AC order ${paket} atas nama ${nama} dengan nomor ${nomorHP}`;
-            const waLink = `https://wa.me/6285520790814?text=${encodeURIComponent(pesan)}`;
-            
-            // Redirect ke pembayaran DANA
-            window.open(`https://link.dana.id/send?phone=085520790814&amount=${getHarga(paket)}`, '_blank');
-            setTimeout(() => window.location.href = waLink, 2000);
+            // Kirim pesanan ke WhatsApp
+            const pesan = `Bang AC order jadi ${paket}, Nama: ${nama}, No: ${nomor}`;
+            window.open(`https://wa.me/6285520790814?text=${encodeURIComponent(pesan)}`, '_blank');
+
+            alert('Harap tunggu beberapa menit untuk proses!');
         }
 
-        function getHarga(paket) {
-            switch (paket) {
-                case "Bot by AC: 1 Hari - 2k": return 2000;
-                case "Bot by AC: 1 Minggu - 10k": return 10000;
-                case "Unban by AC: Batu - 40k": return 40000;
-                case "Unban by AC: Spam - 20k": return 20000;
-                default: return 0;
+        // Kombinasi CTRL + A untuk membuka halaman admin
+        document.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && event.key === 'a') {
+                document.getElementById('adminLink').click();
             }
-        }
+        });
     </script>
+
 </body>
 
 </html>
