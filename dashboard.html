@@ -2,129 +2,86 @@
 <html lang="id">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Order</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background: url('img/logo.webp') no-repeat center center/cover;
-            overflow: hidden;
-        }
-
-        h2 {
-            color: #fff;
-        }
-
-        .container {
-            margin-top: 50px;
-        }
-
-        button {
-            padding: 10px 20px;
-            margin: 10px;
-            cursor: pointer;
-        }
-
-        .form-container {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-    <!-- Dashboard Order -->
     <div class="container">
-        <h2>Dashboard Order</h2>
-        <div class="form-container">
-            <label>Nama: <input type="text" id="nama" required></label><br><br>
-            <label>Nomor HP: <input type="text" id="nomorHP" required></label><br><br>
+        <div class="logo">
+            <img src="img/logo.webp" alt="Logo">
+        </div>
 
-            <label>Pilih Paket:</label>
-            <select id="paket">
-                <option value="2000">Bot by AC: 1 Hari - 2k</option>
-                <option value="10000">Bot by AC: 1 Minggu - 10k</option>
-                <option value="20000">Bot by AC: 1 Bulan - 20k</option>
-                <option value="40000">Unban Batu - 40k</option>
-                <option value="20000">Unban Spam - 20k</option>
-            </select><br><br>
+        <!-- Form Order -->
+        <h2>Dashboard Order</h2>
+        <form id="orderForm">
+            <label for="nama">Nama:</label>
+            <input type="text" id="nama" name="nama" placeholder="Masukkan Nama" required>
+
+            <label for="nomor">Nomor HP:</label>
+            <input type="text" id="nomor" name="nomor" placeholder="Masukkan Nomor HP" required>
+
+            <label for="paket">Pilih Paket:</label>
+            <select id="paket" name="paket" required>
+                <option value="Bot 1 Hari - 2k">Bot by AC: 1 Hari - 2k</option>
+                <option value="Bot 1 Minggu - 10k">Bot by AC: 1 Minggu - 10k</option>
+                <option value="Bot 1 Bulan - 30k">Bot by AC: 1 Bulan - 30k</option>
+                <option value="Unban Batu - 40k">Unban by AC: Batu - 40k</option>
+                <option value="Unban Spam - 20k">Unban by AC: Spam - 20k</option>
+            </select>
 
             <h3>Pilih Metode Pembayaran:</h3>
-            <button onclick="bayarDANA()">Bayar dengan DANA</button>
-            <button onclick="comingSoon()">Bayar dengan OVO</button>
-            <button onclick="comingSoon()">Bayar dengan GOPAY</button>
-        </div>
-    </div>
+            <button type="button" onclick="prosesPembayaran('DANA')">Bayar dengan DANA</button>
+            <button type="button" onclick="prosesPembayaran('OVO')">Bayar dengan OVO (Coming Soon)</button>
+            <button type="button" onclick="prosesPembayaran('GOPAY')">Bayar dengan GOPAY (Coming Soon)</button>
+        </form>
 
-    <!-- Form Admin Login -->
-    <div class="container" id="adminLogin">
+        <!-- Form Login Admin -->
         <h2>Login Admin</h2>
-        <div class="form-container">
-            <label>Username: <input type="text" id="adminUser" required></label><br><br>
-            <label>Password: <input type="password" id="adminPass" required></label><br><br>
-            <button onclick="loginAdmin()">Login</button>
-        </div>
+        <form id="adminLogin" action="admin.html">
+            <label>Username:</label>
+            <input type="text" id="username" required>
+
+            <label>Password:</label>
+            <input type="password" id="password" required>
+
+            <button type="submit">Login</button>
+        </form>
     </div>
 
+    <script src="admin.js"></script>
     <script>
-        // Fungsi untuk bayar otomatis ke aplikasi DANA
-        function bayarDANA() {
+        function prosesPembayaran(metode) {
             const nama = document.getElementById('nama').value;
-            const nomorHP = document.getElementById('nomorHP').value;
+            const nomor = document.getElementById('nomor').value;
             const paket = document.getElementById('paket').value;
-            const nomorDANA = '085520790814';
 
-            if (!nama || !nomorHP) {
-                alert("Harap isi nama dan nomor HP terlebih dahulu!");
+            if (!nama || !nomor || !paket) {
+                alert("Harap lengkapi semua data!");
                 return;
             }
 
-            // Simpan data pesanan untuk admin (localStorage)
-            const orderData = {
-                nama: nama,
-                nomorHP: nomorHP,
-                paket: document.getElementById('paket').selectedOptions[0].text,
-                jumlah: paket
-            };
-            localStorage.setItem('pesanan', JSON.stringify(orderData));
-
-            // Kirim pesan otomatis ke WhatsApp
-            const pesanWA = `Bang AC order: ${orderData.paket} atas nama ${nama}, No. HP: ${nomorHP}`;
-            const linkWA = `https://wa.me/6285520790814?text=${encodeURIComponent(pesanWA)}`;
-
-            // Deeplink ke aplikasi DANA
-            const deeplinkDANA = `https://link.dana.id/qr/4gpf6x?amount=${paket}&receiver=${nomorDANA}`;
-
-            alert(`Mengalihkan ke pembayaran DANA sebesar ${paket / 1000}k`);
-            window.location.href = deeplinkDANA;
-
-            // Setelah 5 detik, buka WhatsApp otomatis
-            setTimeout(() => window.location.href = linkWA, 5000);
-        }
-
-        // Fungsi untuk metode pembayaran OVO & GOPAY (Coming Soon)
-        function comingSoon() {
-            alert("Metode pembayaran ini akan segera tersedia!");
-        }
-
-        // Fungsi untuk login Admin
-        function loginAdmin() {
-            const user = document.getElementById('adminUser').value;
-            const pass = document.getElementById('adminPass').value;
-
-            // Kredensial admin
-            if (user === 'actzy909' && pass === '3Z^Yk~HaKd6M-spj>PoC') {
-                alert('Login berhasil! Mengarahkan ke halaman admin.');
-                window.location.href = 'admin.html'; // Pastikan halaman admin tersedia
+            if (metode === 'DANA') {
+                window.location.href = `https://link.dana.id/qr/3p5e27q?amount=${getHarga(paket)}&username=${nama}`;
+                alert("Harap lakukan pembayaran dan tunggu beberapa menit.");
             } else {
-                alert('Login gagal. Coba lagi!');
+                alert(metode + " sedang dalam pengembangan.");
+            }
+        }
+
+        function getHarga(paket) {
+            switch (paket) {
+                case 'Bot 1 Hari - 2k': return 2000;
+                case 'Bot 1 Minggu - 10k': return 10000;
+                case 'Bot 1 Bulan - 30k': return 30000;
+                case 'Unban Batu - 40k': return 40000;
+                case 'Unban Spam - 20k': return 20000;
+                default: return 0;
             }
         }
     </script>
-
 </body>
 
-</html>
+    </html>
