@@ -102,11 +102,27 @@
         // Fungsi untuk memilih paket
         function order(packageName, price) {
             selectedPackage = `${packageName} - ${price}`;
+
+            // Notifikasi jika ada yang memesan
             Swal.fire({
-                title: 'Paket Dipilih',
-                text: `Anda memilih ${packageName} dengan harga Rp ${price}`,
+                title: 'Pesanan Berhasil!',
+                text: `Anda telah memesan ${packageName} dengan harga Rp ${price}`,
                 icon: 'success'
             });
+
+            // Kirim notifikasi WhatsApp
+            sendWhatsAppNotification(packageName, price);
+        }
+
+        // Fungsi untuk mengirim notifikasi WhatsApp
+        function sendWhatsAppNotification(packageName, price) {
+            const phoneNumber = '6285520790814'; // Nomor penerima
+            const message = `Pesanan baru! Paket: ${packageName}, Harga: Rp ${price}`;
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+            // Membuka WhatsApp dalam tab baru
+            window.open(whatsappURL, '_blank');
         }
 
         // Fungsi pembayaran DANA otomatis
