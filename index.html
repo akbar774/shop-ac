@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-    <script src="database.js"></script> <!-- Memuat file database -->
+    <script src="database.js" defer></script> <!-- Menambahkan atribut defer untuk memastikan file termuat -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -121,24 +121,36 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            if (cekLogin(username, password)) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Login Berhasil!',
-                    text: 'Anda akan diarahkan ke dashboard.',
-                    timer: 2000,
-                    showConfirmButton: false
-                }).then(() => {
-                    window.location.href = "dashboard.html";
-                });
+            // Menunggu database.js termuat sebelum memeriksa login
+            if (typeof cekLogin === "function") {
+                if (cekLogin(username, password)) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Login Berhasil!',
+                        text: 'Anda akan diarahkan ke dashboard.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "dashboard.html";
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Gagal!',
+                        text: 'Username atau password salah.',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                }
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Login Gagal!',
-                    text: 'Username atau password salah.',
+                    title: 'Kesalahan Sistem!',
+                    text: 'Gagal memuat file database.',
                     timer: 3000,
                     showConfirmButton: false
                 });
+                console.error("Fungsi cekLogin tidak ditemukan. Pastikan database.js dimuat dengan benar.");
             }
         }
 
@@ -172,4 +184,4 @@
 
 </body>
 
-    </html>
+</html>        
