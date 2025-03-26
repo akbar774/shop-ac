@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Order</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="database.js"></script>
+    <script src="admin.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Dashboard Order</h2>
+
+        <label for="nama">Nama:</label>
+        <input type="text" id="nama" placeholder="Masukkan Nama" required>
+
+        <label for="nomor">Nomor HP:</label>
+        <input type="text" id="nomor" placeholder="Masukkan Nomor HP" required>
+
+        <label for="paket">Pilih Paket:</label>
+        <select id="paket"></select>
+
+        <h3>Pilih Metode Pembayaran:</h3>
+        <button onclick="bayarDANA()">Bayar dengan DANA</button>
+        <button disabled>Bayar dengan OVO (Coming Soon)</button>
+        <button disabled>Bayar dengan GOPAY (Coming Soon)</button>
+
+        <p><a href="admin-dashboard.html" id="adminLink" style="display:none;">Login Admin</a></p>
+
+        <h3>Tambah Produk</h3>
+        <label for="produkNama">Nama Produk:</label>
+        <input type="text" id="produkNama" placeholder="Masukkan Nama Produk" required>
+        
+        <label for="produkHarga">Harga Produk:</label>
+        <input type="number" id="produkHarga" placeholder="Masukkan Harga Produk" required>
+        
+        <button onclick="tambahProduk()">Tambah Produk</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const paketDropdown = document.getElementById('paket');
+            const paketList = getPackages();
+
+            paketList.forEach(paket => {
+                const option = document.createElement('option');
+                option.value = JSON.stringify(paket);
+                option.textContent = `${paket.name} - Rp ${paket.price.toLocaleString()}`;
+                paketDropdown.appendChild(option);
+            });
+
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('admin') === 'true') {
+                document.getElementById('adminLink').style.display = 'block';
+            }
+        });
+
+        function tambahProduk() {
+            const produkNama = document.getElementById('produkNama').value;
+            const produkHarga = document.getElementById('produkHarga').value;
+
+            if (!produkNama || !produkHarga) {
+                alert('Harap isi nama dan harga produk!');
+                return;
+            }
+
+            const produkBaru = { name: produkNama, price: parseFloat(produkHarga) };
+            saveProduct(produkBaru);
+            alert(`Produk ${produkNama} berhasil ditambahkan!`);
+            document.getElementById('produkNama').value = '';
+            document.getElementById('produkHarga').value = '';
+        }
+
+        function bayarDANA() {
+            const nama = document.getElementById('nama').value;
+            const nomor = document.getElementById('nomor').value;
+            const paketData = JSON.parse(document.getElementById('paket').value);
+
+            if (!nama || !nomor) {
+                alert('Harap isi nama dan nomor HP!');
+                return;
+            }
+
+            const pesan = `Bang AC order jadi ${paketData.name}, Nama: ${nama}, No: ${nomor}`;
+            window.open(`https://wa.me/6285520790814?text=${encodeURIComponent(pesan)}`, '_blank');
+
+            const jumlahPembayaran = paketData.price;
+            const nomorDANA = '085520790814';
+            const linkDANA = `https://link.dana.id/qr/2z0b4d90?amount=${jumlahPembayaran}&phone=${nomorDANA}`;
+
+            window.open(linkDANA, '_blank');
+            alert(`Anda akan diarahkan ke aplikasi DANA untuk membayar Rp ${jumlahPembayaran.toLocaleString()}.`);
+        }
+    </script>
+</body>
+</html>
